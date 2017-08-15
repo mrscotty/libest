@@ -117,6 +117,7 @@ if ( $ENV{EST_SERVER_NAME} eq '127.0.0.1' ) {
 
 $ENV{LD_LIBRARY_PATH} = '/usr/local/est/lib';
 
+diag("Run EST client tests...");
 chdir($clientsimple_dir) or die "Error: chdir $clientsimple_dir: $!";
 $out =
 qx{./estclient_simple -s $ENV{EST_SERVER_NAME} -p $ENV{EST_SERVER_PORT} -u $ENV{EST_SERVER_USER} -h $ENV{EST_SERVER_PASS}};
