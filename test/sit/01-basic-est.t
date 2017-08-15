@@ -65,6 +65,8 @@ my $basedir = getcwd;
 #
 ###########################################################################
 
+diag("EST_SERVER_NAME=$ENV{EST_SERVER_NAME}");
+    my $srv;
 if ( $ENV{EST_SERVER_NAME} eq '127.0.0.1' ) {
     chdir($server_dir) or die "Error: chdir $server_dir: $!";
     
@@ -88,11 +90,11 @@ if ( $ENV{EST_SERVER_NAME} eq '127.0.0.1' ) {
 #
 ###########################################################################
 
-    $pid = (
-        open my $svr,
+    $pid = open( $srv,
         '-|',
 "./estserver -c estCA/private/estservercertandkey.pem -k estCA/private/estservercertandkey.pem -r estrealm"
     );
+
     if ( not $pid ) {
         die "Error running est server: $!";
     }
@@ -104,10 +106,9 @@ if ( $ENV{EST_SERVER_NAME} eq '127.0.0.1' ) {
         $out,
         qr{example/server/.libs/lt-estserver}s,
         "confirm estserver is running"
-    ) or BAIL_OUT "Failed to find estserver in process table";
+    ) or BAIL_OUT ("Failed to find estserver in process table");
     chdir($basedir) or die "Error: chdir $basedir $!";
 }
-
 
 ###########################################################################
 #
@@ -115,6 +116,7 @@ if ( $ENV{EST_SERVER_NAME} eq '127.0.0.1' ) {
 #
 ###########################################################################
 
+diag("Setting LD_LIBRARY_PATH");
 $ENV{LD_LIBRARY_PATH} = '/usr/local/est/lib';
 
 diag("Run EST client tests...");
